@@ -14,7 +14,7 @@ analyses depend on each other; the section list is at the top of the script.
 
 ## Data
 
-Download the data deposit (Zenodo, DOI [10.5281/zenodo.23307371](https://doi.org/10.5281/zenodo.23307371)), decompress the `.gz` files and
+Download the data deposit (Zenodo, DOI [10.5281/zenodo.23307370](https://doi.org/10.5281/zenodo.23307370)), decompress the `.gz` files and
 place them as follows:
 
 | Files | Folder |
