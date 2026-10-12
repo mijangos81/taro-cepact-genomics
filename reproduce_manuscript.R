@@ -1,6 +1,6 @@
 # ============================================================================
 # Reproduction script for
-#   Restall, Mijangos, Kilian & Campbell. Genome-wide SNPs reveal clonal
+#   Mijangos, Restall, Kilian & Campbell. Genome-wide SNPs reveal clonal
 #   redundancy and connectivity in the world's largest taro collection.
 #   Horticulture Research.
 #

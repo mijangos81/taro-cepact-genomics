@@ -2,7 +2,7 @@
 
 Analysis code for:
 
-> Restall J, Mijangos JL, Kilian A, Campbell B. Genome-wide SNPs reveal clonal
+> Mijangos JL, Restall J, Kilian A, Campbell B. Genome-wide SNPs reveal clonal
 > redundancy and connectivity in the world's largest taro collection.
 > *Horticulture Research* (submitted).
 
