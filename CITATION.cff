@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite the paper and this archive."
+title: "taro-cepact-genomics: analysis code for 'Genome-wide SNPs reveal clonal redundancy and connectivity in the world's largest taro collection'"
+type: software
+license: MIT
+repository-code: "https://github.com/mijangos81/taro-cepact-genomics"
+authors:
+  - family-names: Restall
+    given-names: Jemma
+    orcid: "https://orcid.org/0000-0001-8000-763X"
+    affiliation: The University of Queensland
+  - family-names: Mijangos
+    given-names: Jose Luis
+    orcid: "https://orcid.org/0000-0001-6121-4860"
+    affiliation: Diversity Arrays Technology
+  - family-names: Kilian
+    given-names: Andrzej
+    orcid: "https://orcid.org/0000-0002-2730-7462"
+    affiliation: Diversity Arrays Technology
+  - family-names: Campbell
+    given-names: Bradley
+    orcid: "https://orcid.org/0000-0003-0815-930X"
+    affiliation: The University of Queensland
+keywords:
+  - Colocasia esculenta
+  - taro
+  - genebank
+  - clonal redundancy
+  - DArTseq
+  - dartRverse

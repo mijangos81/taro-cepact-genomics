@@ -1,0 +1,14 @@
+# Data files from the Zenodo data deposit and everything the script writes
+input_files/
+info/
+outputs/
+figures/
+data/
+reference/
+bam_files/
+
+.DS_Store
+.Rhistory
+.RData
+.Rproj.user/
+Rplots.pdf
