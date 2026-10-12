@@ -5,14 +5,14 @@ type: software
 license: MIT
 repository-code: "https://github.com/mijangos81/taro-cepact-genomics"
 authors:
-  - family-names: Restall
-    given-names: Jemma
-    orcid: "https://orcid.org/0000-0001-8000-763X"
-    affiliation: The University of Queensland
   - family-names: Mijangos
     given-names: Jose Luis
     orcid: "https://orcid.org/0000-0001-6121-4860"
     affiliation: Diversity Arrays Technology
+  - family-names: Restall
+    given-names: Jemma
+    orcid: "https://orcid.org/0000-0001-8000-763X"
+    affiliation: The University of Queensland
   - family-names: Kilian
     given-names: Andrzej
     orcid: "https://orcid.org/0000-0002-2730-7462"

@@ -4,14 +4,14 @@
   "description": "R code that reproduces every figure, table and reported number of Restall et al., 'Genome-wide SNPs reveal clonal redundancy and connectivity in the world's largest taro collection' (Horticulture Research, submitted), from the DArTseq genotypes of the taro (Colocasia esculenta) collection at the Centre for Pacific Crops and Trees (CePaCT). The input data are deposited separately on Zenodo.",
   "creators": [
     {
-      "name": "Restall, Jemma",
-      "orcid": "0000-0001-8000-763X",
-      "affiliation": "The University of Queensland"
-    },
-    {
       "name": "Mijangos, Jose Luis",
       "orcid": "0000-0001-6121-4860",
       "affiliation": "Diversity Arrays Technology"
+    },
+    {
+      "name": "Restall, Jemma",
+      "orcid": "0000-0001-8000-763X",
+      "affiliation": "The University of Queensland"
     },
     {
       "name": "Kilian, Andrzej",
