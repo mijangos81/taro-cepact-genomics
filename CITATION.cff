@@ -1,26 +1,56 @@
 cff-version: 1.2.0
 message: "If you use this code, please cite the paper and this archive."
-title: "taro-cepact-genomics: analysis code for 'Genome-wide SNPs reveal clonal redundancy and connectivity in the world's largest taro collection'"
+title: "taro-cepact-genomics: analysis code for 'Shared clones trace the exchange of taro across the Pacific in the world's largest in vitro collection'"
 type: software
 license: MIT
 repository-code: "https://github.com/mijangos81/taro-cepact-genomics"
 authors:
-  - family-names: Mijangos
-    given-names: Jose Luis
-    orcid: "https://orcid.org/0000-0001-6121-4860"
-    affiliation: Diversity Arrays Technology
   - family-names: Restall
     given-names: Jemma
     orcid: "https://orcid.org/0000-0001-8000-763X"
-    affiliation: The University of Queensland
+    affiliation: "Queensland Alliance for Agriculture and Food Innovation, The University of Queensland"
+  - family-names: Mijangos
+    given-names: Jose Luis
+    orcid: "https://orcid.org/0000-0001-6121-4860"
+    affiliation: "Diversity Arrays Technology"
   - family-names: Kilian
     given-names: Andrzej
     orcid: "https://orcid.org/0000-0002-2730-7462"
-    affiliation: Diversity Arrays Technology
+    affiliation: "Diversity Arrays Technology"
+  - family-names: Cakaunitavuki
+    given-names: Semi
+    affiliation: "Centre for Pacific Crops and Trees, The Pacific Community"
+  - family-names: Kumar
+    given-names: Renuma J.
+    affiliation: "Centre for Pacific Crops and Trees, The Pacific Community"
+  - family-names: Nand
+    given-names: Preeti
+    affiliation: "Centre for Pacific Crops and Trees, The Pacific Community"
+  - family-names: Dau
+    given-names: Sera
+    affiliation: "Centre for Pacific Crops and Trees, The Pacific Community"
+  - family-names: Meleisea Waqainabete
+    given-names: Logotonu
+    affiliation: "Centre for Pacific Crops and Trees, The Pacific Community"
+  - family-names: Sukal
+    given-names: Amit
+    affiliation: "Centre for Pacific Crops and Trees, The Pacific Community"
+  - family-names: Dinglasan
+    given-names: Eric
+    affiliation: "Queensland Alliance for Agriculture and Food Innovation, The University of Queensland"
+  - family-names: Chapman
+    given-names: Scott
+    affiliation: "Queensland Alliance for Agriculture and Food Innovation, The University of Queensland; School of Agriculture and Food Sciences, The University of Queensland"
+  - family-names: Godwin
+    given-names: Ian
+    affiliation: "Queensland Alliance for Agriculture and Food Innovation, The University of Queensland"
+  - family-names: Smith
+    given-names: Millicent
+    affiliation: "Queensland Alliance for Agriculture and Food Innovation, The University of Queensland; School of Agriculture and Food Sciences, The University of Queensland"
   - family-names: Campbell
     given-names: Bradley
     orcid: "https://orcid.org/0000-0003-0815-930X"
-    affiliation: The University of Queensland
+    affiliation: "Queensland Alliance for Agriculture and Food Innovation, The University of Queensland"
 keywords:
   - Colocasia esculenta
   - taro

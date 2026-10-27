@@ -1,24 +1,23 @@
 # ============================================================================
 # Reproduction script for
-#   Mijangos, Restall, Kilian & Campbell. Genome-wide SNPs reveal clonal
-#   redundancy and connectivity in the world's largest taro collection.
-#   Horticulture Research.
+#   Restall, Mijangos et al. Shared clones trace the exchange of taro across
+#   the Pacific in the world's largest in vitro collection (submitted).
 #
 # Runs from the repository root and regenerates every figure, table and
-# reported number of the main text and the Supplementary Information, in the
+# reported number of the main text and the Supplemental Material, in the
 # order the analyses depend on each other:
 #   1  Setup: packages, seed, directories, shared helpers
-#   2  Dataset assembly (Methods) and Fig. 1
-#   3  Ploidy callers (SI S1; Figs S1, S2)
-#   4  Diploid working set (SI S2; Figs S3, S4; Supplementary Data 4)
-#   5  Qploidy (SI S1.4)
+#   2  Dataset assembly (Methods) and Figure 1
+#   3  Ploidy callers (Supplemental Section S1; Supplemental Figures S2, S3)
+#   4  Diploid working set (Supplemental Section S2; Supplemental Figures S1, S4; Supplemental Data S4)
+#   5  Qploidy (Supplemental Section S1.4)
 #   6  Clonal lineages, cultivar synonymy and the candidate core
-#      (Figs 2, 3, 5, S6; Supplementary Table 3; Supplementary Data 1, 2, 5, 6)
-#   7  Ploidy threshold and redundancy (SI S2.1; Table S4 rows)
-#   8  Population structure (Figs 6, 7, 8, S7, S8, S9; Supplementary Data 3)
+#      (Figures 2, 3, 5; Supplemental Figure S5; Supplemental Table S3; Supplemental Data S1, S2, S5, S6)
+#   7  Ploidy threshold and redundancy (Supplemental Section S2.1; Supplemental Table S1 rows)
+#   8  Population structure (Figures 6, 7, 8; Supplemental Figures S6, S7, S8; Supplemental Data S3)
 #   9  Diversity by country and cluster, manuscript tables
-#      (Table 1, Fig. 4; Tables S1, S2, S4, S5; Supplementary Data 7, 8)
-#  10  Selection scan and gene context (Fig. S5; SI S3)
+#      (Table 1, Figure 4; Supplemental Tables S1, S2, S4, S5; Supplemental Data S7, S8)
+#  10  Selection scan and gene context (Supplemental Figure S9; Supplemental Section S3)
 #
 # Inputs: the two DArTseq SNP reports and the three count reports in
 # input_files/, the sample metadata and country coordinates in info/, and the
@@ -133,7 +132,7 @@ pop_palette <- function(n) {
 }
 
 # ============================================================================
-# 2. Dataset assembly (Methods) and Fig. 1
+# 2. Dataset assembly (Methods) and Figure 1
 # ============================================================================
 
 ## Methods: read the two DArTseq SNP reports (same samples, disjoint marker panels)
@@ -226,7 +225,7 @@ t4 <- gl.filter.monomorphs(t4, verbose = 0)
 t4 <- t4[, order(as.numeric(t4$chromosome), t4$position, decreasing = FALSE)]
 saveRDS(t4, "input_files/taro.rds")
 
-## Fig. 1: geographic sampling of the taro collection (figures/Fig_taro_map.png)
+## Figure 1: geographic sampling of the taro collection (figures/Fig_taro_map.png)
 gl  <- readRDS("input_files/taro.rds")
 pts <- data.frame(lon = gl@other$latlon$lon, lat = gl@other$latlon$lat,
                   location = as.character(pop(gl)))
@@ -282,7 +281,7 @@ ggsave("figures/Fig_taro_map.png", p, width = 9.0, height = 6.0, units = "in",
        dpi = 300, bg = "white")
 
 # ============================================================================
-# 3. Ploidy callers (SI S1; Figs S1, S2)
+# 3. Ploidy callers (Supplemental Section S1; Supplemental Figures S2, S3)
 # ============================================================================
 
 # read a DArT two-row counts report (odd row = reference allele, even row = alternate allele) for the requested individuals
@@ -443,7 +442,7 @@ write.csv(nq, "outputs/ploidy_taro_nQuack.csv", row.names = FALSE)
 nquack_tab <- table(flow_cytometry = nq[["Reported ploidy"]], nQuack = nq$nQuack)
 write.csv(as.data.frame.matrix(nquack_tab), "outputs/nquack_vs_flow_cytometry.csv")
 
-## ---- Allele balance at heterozygous sites of the flow cytometry set (Fig. S1) ----
+## ---- Allele balance at heterozygous sites of the flow cytometry set (Supplemental Figure S2) ----
 
 # allele-1 / allele-2 read matrices (loci x individuals) for the 65 verified individuals
 ind_fc <- unique(truth$id)
@@ -483,7 +482,7 @@ for (TH in THRESHOLDS) {
 summ_df <- do.call(rbind, summ)
 write.csv(summ_df, "outputs/ploidy_signal_depth_summary.csv", row.names = FALSE)
 
-## Fig. S1: half-band fraction of verified diploids and triploids against the depth threshold
+## Supplemental Figure S2: half-band fraction of verified diploids and triploids against the depth threshold
 summ_df$ploidy_fc <- factor(summ_df$ploidy_fc, levels = c("Diploid", "Triploid"))
 exp_df <- summ_df[summ_df$ploidy_fc == "Diploid", c("threshold", "binom_expected_half")]
 p <- ggplot(summ_df, aes(threshold, med_frac_half, colour = ploidy_fc)) +
@@ -504,7 +503,7 @@ p <- ggplot(summ_df, aes(threshold, med_frac_half, colour = ploidy_fc)) +
 ggsave("figures/ploidy_signal_depth.pdf", p, width = 7.5, height = 5)
 ggsave("figures/ploidy_signal_depth.png", p, width = 7.5, height = 5, dpi = 300)
 
-## ---- HDplot paralog screen (McKinney et al. 2017) on the same read matrices (Fig. S2) ----
+## ---- HDplot paralog screen (McKinney et al. 2017) on the same read matrices (Supplemental Figure S3) ----
 GENO_MINDEPTH <- 8
 HET_LO <- 0.10; HET_HI <- 0.90
 H_MAX <- 0.50
@@ -533,7 +532,7 @@ hd$class[evaluable] <- ifelse(hd$H[evaluable] <= H_MAX & abs(hd$D[evaluable]) <=
 write.csv(hd, "outputs/ploidy_hdplot_loci.csv", row.names = FALSE)
 singleton_loci <- which(hd$class == "singleton")
 
-## Fig. S2: HDplot, D against H for the evaluable loci
+## Supplemental Figure S3: HDplot, D against H for the evaluable loci
 hdplot_fig <- function() {
   ev <- which(evaluable)
   plot(hd$H[ev], hd$D[ev], pch = 16, cex = 0.5,
@@ -690,10 +689,10 @@ plot_inds("Triploid", 16)
 dev.off()
 
 # ============================================================================
-# 4. Diploid working set (SI S2; Figs S3, S4; Supplementary Data 4)
+# 4. Diploid working set (Supplemental Section S2; Supplemental Figures S1, S4; Supplemental Data S4)
 # ============================================================================
 
-## Fig. S3 / Results: individual heterozygosity separates diploids from polyploids
+## Supplemental Figure S4 / Results: individual heterozygosity separates diploids from polyploids
 # flow-cytometry cytotypes (outputs/ploidy.csv: id, "Flow cytometry verified")
 g <- readRDS("input_files/taro.rds")
 truth <- read.csv("outputs/ploidy.csv", stringsAsFactors = FALSE)
@@ -726,7 +725,7 @@ cand <- sort(unique(lab$Ho))
 youden <- sapply(cand, function(t) mean(pol > t) + mean(dip <= t) - 1)
 tstar <- cand[which.max(youden)]
 
-# Fig. S3: labelled Ho by class (upper), all individuals with labelled rugs (lower)
+# Supplemental Figure S4: labelled Ho by class (upper), all individuals with labelled rugs (lower)
 draw_ho_gate <- function() {
   par(mfrow = c(2, 1), mar = c(4, 4, 2, 1))
   br <- seq(0, max(lab$Ho) * 1.05, length.out = 40)
@@ -750,7 +749,7 @@ pdf("figures/ploidy_diploid_filter_Ho.pdf", width = 10, height = 7); draw_ho_gat
 png("figures/ploidy_diploid_filter_Ho.png", width = 10, height = 7, units = "in", res = 200)
 draw_ho_gate(); dev.off()
 
-## SI S2.1: AUC bootstrap 95% CI (0.984-1.000); sensitivity 11/11 and specificity 51/52 at Ho 0.0923 with exact CIs
+## Supplemental Section S2.1: AUC bootstrap 95% CI (0.984-1.000); sensitivity 11/11 and specificity 51/52 at Ho 0.0923 with exact CIs
 THRESH <- 0.0923
 mixo <- lab$Ho[lab$ploidy_fc == "Mixoploid"]
 trip <- lab$Ho[lab$ploidy_fc == "Triploid"]
@@ -777,7 +776,7 @@ write.csv(data.frame(
                   spec, spec_ci[1], spec_ci[2], tstar), 4)),
   "outputs/ploidy_gate_ci.csv", row.names = FALSE)
 
-## SI S2.1: contamination and hybridisation cross-check of the Ho screen
+## Supplemental Section S2.1: contamination and hybridisation cross-check of the Ho screen
 ind <- ind[match(indNames(g), ind$id), ]
 ind$cat <- with(ind, ifelse(!is.na(class) & class == "Diploid", "verif-diploid",
                      ifelse(!is.na(class) & class == "Polyploid", "verif-polyploid",
@@ -818,7 +817,7 @@ dev.off()
 write.csv(ind[, c("id", "Ho", "call_rate", "n_called", "ploidy_fc", "class", "cat", "PC1", "PC2", "PC3")],
           "outputs/ploidy_crosscheck.csv", row.names = FALSE)
 
-## Supplementary Data 4: per-accession diploid decision (flow cytometry where available, Ho < 0.0923 otherwise)
+## Supplemental Data S4: per-accession diploid decision (flow cytometry where available, Ho < 0.0923 otherwise)
 ind$decision <- with(ind, ifelse(
   !is.na(class) & class == "Diploid", "keep-verified-diploid",
   ifelse(!is.na(class) & class == "Polyploid", "drop-verified-polyploid",
@@ -832,7 +831,7 @@ gd <- gl.keep.ind(g, ind.list = ind$id[ind$is_diploid], verbose = 0)
 gd <- gl.recalc.metrics(gd, verbose = 0)
 saveRDS(gd, "input_files/taro_diploid.rds")
 
-## Fig. S4: PCA of all accessions before the diploid filter, coloured by ploidy
+## Supplemental Figure S1: PCA of all accessions before the diploid filter, coloured by ploidy
 set.seed(42)
 dec <- read.csv("outputs/diploid_set_decisions.csv", stringsAsFactors = FALSE)
 fc <- trimws(as.character(dec$ploidy_fc))
@@ -850,7 +849,7 @@ p <- gl.pcoa.plot(pca, glp, pt.size = 3, verbose = 0)
 ggplot2::ggsave("figures/pca_preploidy_by_ploidy.png", p, width = 8, height = 6, dpi = 200)
 ggplot2::ggsave("figures/pca_preploidy_by_ploidy.pdf", p, width = 8, height = 6)
 
-## SI S2.1: leave-one-out cross-validation of the Youden threshold (11/11 polyploids, 51/52 diploids)
+## Supplemental Section S2.1: leave-one-out cross-validation of the Youden threshold (11/11 polyploids, 51/52 diploids)
 youden_thr <- function(a, b) {
   cands <- sort(unique(c(a, b)))
   grid <- c(cands[1] - 1e-6, (head(cands, -1) + tail(cands, -1)) / 2, tail(cands, 1) + 1e-6)
@@ -877,7 +876,7 @@ ctry <- setNames(as.character(pop(gd)), indNames(gd))
 near_cut_country <- sort(table(ctry[intersect(ws$id[ws$Ho > THRESH - 0.02], names(ctry))]), decreasing = TRUE)
 
 # ============================================================================
-# 5. Qploidy (SI S1.4)
+# 5. Qploidy (Supplemental Section S1.4)
 # ============================================================================
 
 ## ---- Qploidy (Taniguti et al. 2025): standardised B-allele frequency from the DArT counts ----
@@ -1073,7 +1072,7 @@ psex_log10 <- function(log10p, n, Ntot) {
 psex_hwe <- mapply(psex_log10, log10_pgen_hwe, mll_n, MoreArgs = list(Ntot = N))
 psex_fis <- mapply(psex_log10, log10_pgen_fis, mll_n, MoreArgs = list(Ntot = N))
 
-## Supplementary Data 5: lineage membership of every diploid accession
+## Supplemental Data S5: lineage membership of every diploid accession
 im <- gl$other$ind.metrics
 membership <- data.frame(
   id              = indNames(gl),
@@ -1157,7 +1156,7 @@ gl_mll <- gl.recalc.metrics(gl_mll, verbose = 0)
 saveRDS(gl_mll, "input_files/taro_diploid_mll.rds")
 
 # ---------------------------------------------------------------------------
-## Results, SI S4.1: single, average and complete linkage give 358, 376 and 392 lineages at 0.008
+## Results, Supplemental Section S4.1: single, average and complete linkage give 358, 376 and 392 lineages at 0.008
 # ---------------------------------------------------------------------------
 CUT <- 0.008
 n <- attr(D, "Size")
@@ -1178,7 +1177,7 @@ linkage <- data.frame(
 write.csv(linkage, "outputs/linkage_sensitivity.csv", row.names = FALSE)
 
 # ---------------------------------------------------------------------------
-## SI S4.1, Methods: genotyping error from 56 technical replicate pairs (23 samples run 2-4 times)
+## Supplemental Section S4.1, Methods: genotyping error from 56 technical replicate pairs (23 samples run 2-4 times)
 # ---------------------------------------------------------------------------
 g4     <- readRDS("input_files/taro_report4_raw.rds")
 cn     <- canon4(indNames(g4))
@@ -1202,7 +1201,7 @@ err <- data.frame(canon = cn[pairs[, 1]],
 write.csv(err, "outputs/somatic_error_floor.csv", row.names = FALSE)
 disc_all <- median(err$discord)
 
-## SI S4.1: discordance 2.49% at all analysis loci (RepAvg >= 0.98) and 0.31% at RepAvg = 1.00
+## Supplemental Section S4.1: discordance 2.49% at all analysis loci (RepAvg >= 0.98) and 0.31% at RepAvg = 1.00
 repL <- g4f@other$loc.metrics$RepAvg
 disc_band <- function(mask) median(apply(pairs, 1, function(p) {
   a <- M4[p[1], mask]; b <- M4[p[2], mask]; both <- !is.na(a) & !is.na(b)
@@ -1211,7 +1210,7 @@ disc_band <- function(mask) median(apply(pairs, 1, function(p) {
 disc_repavg <- sapply(c(0.98, 0.99, 0.995, 1.0), function(th) disc_band(repL >= th))
 names(disc_repavg) <- c("0.98", "0.99", "0.995", "1.00")
 
-## SI S4.1: replicate samples have a lower call rate (0.76) than the collection (0.97)
+## Supplemental Section S4.1: replicate samples have a lower call rate (0.76) than the collection (0.97)
 cr4    <- 1 - vapply(g4@gen, function(x) length(x@NA.posi), 1) / nLoc(g4)
 cr_rep <- median(cr4[cn %in% sets])
 cr_all <- median(callrate)
@@ -1234,7 +1233,7 @@ A_full <- sum(present_full)
 Pp <- P[, present_full, drop = FALSE]
 
 # ---------------------------------------------------------------------------
-## Fig. S6: lineage count, redundancy and core allele capture across the lineage threshold
+## Supplemental Figure S5: lineage count, redundancy and core allele capture across the lineage threshold
 # ---------------------------------------------------------------------------
 CHOSEN <- 0.008
 grid <- sort(unique(c(0.002, 0.004, 0.005, 0.006, 0.007, CHOSEN, 0.009,
@@ -1274,7 +1273,7 @@ ggsave("figures/mlg_threshold_sensitivity.png", p_s6, width = 7.5, height = 5,
        dpi = 300, bg = "white")
 
 # ---------------------------------------------------------------------------
-## Fig. 3: sharing of clonal lineages among countries (Pacific-centred map)
+## Figure 3: sharing of clonal lineages among countries (Pacific-centred map)
 # ---------------------------------------------------------------------------
 mm <- read.csv("outputs/mlg_membership.csv", stringsAsFactors = FALSE)
 d <- data.frame(
@@ -1376,7 +1375,7 @@ ggsave("figures/mlg_clone_sharing_map.png", p_map, width = 10.5, height = 6.5,
        units = "in", dpi = 300, bg = "white")
 
 # ---------------------------------------------------------------------------
-## Fig. 5: clonal richness R by country (N >= 6) and richness vs Simpson evenness V (N >= 20)
+## Figure 5: clonal richness R by country (N >= 6) and richness vs Simpson evenness V (N >= 20)
 # ---------------------------------------------------------------------------
 dv <- read.csv("outputs/mlg_diversity_indices.csv", stringsAsFactors = FALSE)
 overall_R <- dv$R[dv$level == "OVERALL"]
@@ -1445,7 +1444,7 @@ ggsave("figures/mlg_diversity_by_population.png", fig5,
        width = 11, height = 5.6, dpi = 300, bg = "white")
 
 # ---------------------------------------------------------------------------
-## Supplementary Data 1 and 2: cultivar synonymy (one genet, many names) and homonymy (one name, many genets)
+## Supplemental Data S1 and S2: cultivar synonymy (one genet, many names) and homonymy (one name, many genets)
 # ---------------------------------------------------------------------------
 memb <- read.csv("outputs/mlg_membership.csv", stringsAsFactors = FALSE,
                  fileEncoding = "latin1")
@@ -1507,7 +1506,7 @@ summ <- data.frame(
 write.csv(summ, "outputs/cultivar_synonymy_summary.csv", row.names = FALSE)
 
 # ---------------------------------------------------------------------------
-## Fig. 2, Supplementary Data 6: candidate core of one ramet per lineage
+## Figure 2, Supplemental Data S6: candidate core of one ramet per lineage
 # ---------------------------------------------------------------------------
 memb <- read.csv("outputs/mlg_membership.csv", stringsAsFactors = FALSE)
 memb <- memb[match(indNames(gl), memb$id), ]
@@ -1655,7 +1654,7 @@ lost_tab <- data.frame(
 write.csv(lost_tab, "outputs/lost_alleles.csv", row.names = FALSE)
 
 # ---------------------------------------------------------------------------
-## Supplementary Table 3: core allele capture as a function of the minimum allele count
+## Supplemental Table S3: core allele capture as a function of the minimum allele count
 # ---------------------------------------------------------------------------
 # allele counts as carriers (accessions carrying the allele) and as copies
 ref_cop <- 2L - M; ref_cop[is.na(ref_cop)] <- 0L
@@ -1682,7 +1681,7 @@ mac_tab <- rbind(
   do.call(rbind, lapply(c(1, 2, 3, 4, 5, 10), mac_row, basis = "copies")))
 write.csv(mac_tab, "outputs/brad03_core_mac.csv", row.names = FALSE)
 
-## Supplementary Table 3: genets needed for 95% and 99% of the alleles at MAC 1, 2 and 3
+## Supplemental Table S3: genets needed for 95% and 99% of the alleles at MAC 1, 2 and 3
 greedy_curve <- function(sel_alleles, ids_idx) {
   Ps <- P[ids_idx, sel_alleles, drop = FALSE]
   reachable <- colSums(Ps) > 0
@@ -1717,7 +1716,7 @@ mac_curves <- do.call(rbind, lapply(c(1, 2, 3), function(mac) {
 write.csv(mac_curves, "outputs/brad03_core_accumulation.csv", row.names = FALSE)
 
 # ============================================================================
-# 7. Ploidy threshold and redundancy (SI S2.1; Table S4 rows)
+# 7. Ploidy threshold and redundancy (Supplemental Section S2.1; Supplemental Table S1 rows)
 # ============================================================================
 
 ## Results: stricter thresholds; 0.0923 -> 0.06 gives 810 accessions, redundancy 63.2% -> 63.6%, core allele capture 96.9% -> 96.5%
@@ -1760,7 +1759,7 @@ write.csv(data.frame(
   "outputs/ploidy_gate_cv.csv", row.names = FALSE)
 
 # ============================================================================
-# 8. Population structure (Figs 6, 7, 8, S7, S8, S9; Supplementary Data 3)
+# 8. Population structure (Figures 6, 7, 8; Supplemental Figures S6, S7, S8; Supplemental Data S3)
 # ============================================================================
 
 # Clone-censored genets (392), loci monomorphic after decloning removed
@@ -1820,7 +1819,7 @@ system2("nemeco", c(file.path(ohana_dir, "g.dgm"), file.path(ohana_dir, "f.k6.ma
                     "-co", file.path(ohana_dir, "c.matrix"), "-mi", 200))
 system2("convert", c("cov2nwk", file.path(ohana_dir, "c.matrix"), file.path(ohana_dir, "tree.nwk")))
 
-## Fig. 6: OHANA K = 6 admixture of the 392 genets, countries west to east (figures/ohana_declone_admixture_k6.png)
+## Figure 7: OHANA K = 6 admixture of the 392 genets, countries west to east (figures/ohana_declone_admixture_k6.png)
 fam <- read.table(file.path(ohana_dir, "gl_plink.fam"), stringsAsFactors = FALSE)
 Q <- as.matrix(read.table(file.path(ohana_dir, "q.k6.matrix"), skip = 1))
 colnames(Q) <- paste0("K", seq_len(ncol(Q)))
@@ -1860,7 +1859,7 @@ ggsave("figures/ohana_declone_admixture_k6.png", p6, width = 13, height = 4.6,
 gl_dip <- readRDS("input_files/taro_diploid.rds")
 gl2dgm(gl_dip, "outputs/ohana")
 
-## Fig. S7A: 30 qpas starts per K (seeds 0-28 plus the seed of the original run), best kept (outputs/ohana_multistart/)
+## Supplemental Figure S8A: 30 qpas starts per K (seeds 0-28 plus the seed of the original run), best kept (outputs/ohana_multistart/)
 ms_dir <- "outputs/ohana_multistart"
 run_dir <- file.path(ms_dir, "runs"); best_dir <- file.path(ms_dir, "best")
 legacy_seeds <- data.frame(K = 2:8,
@@ -1899,7 +1898,7 @@ for (i in seq_len(nrow(best))) {
 }
 write.csv(best[c("K", "loglik")], file.path(ms_dir, "qpas_loglik_by_K.csv"), row.names = FALSE)
 
-## Fig. S7B: sNMF cross-entropy K = 1-10, five runs, on the same accessions (outputs/snmf_kselect/)
+## Supplemental Figure S8B: sNMF cross-entropy K = 1-10, five runs, on the same accessions (outputs/snmf_kselect/)
 gl_ce <- gl.filter.monomorphs(gl_dip, verbose = 0)
 gl2geno(gl_ce, outfile = "taro_dip", outpath = "outputs/snmf_kselect", verbose = 0)
 proj <- snmf("outputs/snmf_kselect/taro_dip.geno", K = 1:10, entropy = TRUE,
@@ -1908,7 +1907,7 @@ ce_df <- data.frame(K = 1:10, cross_entropy = sapply(1:10, function(k)
   mean(cross.entropy(proj, K = k), na.rm = TRUE)))
 ce_df$dCE <- c(NA, diff(ce_df$cross_entropy))
 
-## Fig. S7: OHANA log likelihood and sNMF cross-entropy by K (figures/k_selection.png)
+## Supplemental Figure S8: OHANA log likelihood and sNMF cross-entropy by K (figures/k_selection.png)
 CHOSEN <- 6
 pA <- ggplot() +
   geom_vline(xintercept = CHOSEN, linetype = 2, colour = "grey40") +
@@ -1927,7 +1926,7 @@ pB <- ggplot(ce_df, aes(K, cross_entropy)) +
 ggsave("figures/k_selection.png", arrangeGrob(pA, pB, ncol = 2), width = 10,
        height = 4.5, dpi = 300, bg = "white")
 
-## SI S4.2: log-likelihood gain and cross-entropy change per added K (outputs/k_selection.csv)
+## Supplemental Section S4.2: log-likelihood gain and cross-entropy change per added K (outputs/k_selection.csv)
 ksel <- data.frame(K = best$K, best_seed = best$seed, ohana_loglik = round(best$loglik, 1),
                    ohana_dLL = round(best$marginal_gain, 1))
 ksel <- merge(ksel, ce_df, by = "K", all = TRUE)
@@ -1935,7 +1934,7 @@ write.csv(ksel[order(ksel$K), ], "outputs/k_selection.csv", row.names = FALSE)
 
 # --- PCA of the genets -------------------------------------------------------
 
-## Fig. 7: PCA of the 392 genets, PC1 vs PC2 and PC1 vs PC3 (figures/pca_declone_combined.png, outputs/pca_declone.rds)
+## Figure 6: PCA of the 392 genets, PC1 vs PC2 and PC1 vs PC3 (figures/pca_declone_combined.png, outputs/pca_declone.rds)
 set.seed(42)
 region_pca <- c(region, IndiaNorthen = "SE/E Asia", Australia = "Australia",
                 UnitedStatesofAmerica = "Other")
@@ -1957,7 +1956,7 @@ ggsave("figures/pca_declone_combined.png",
 
 # --- Country tree ------------------------------------------------------------
 
-## Fig. 8: F81 distances among countries from the tag sequences, Fitch-Margoliash tree (outputs/dist_phylo_declone.rds, outputs/tree_fitch_declone.rds)
+## Figure 8: F81 distances among countries from the tag sequences, Fitch-Margoliash tree (outputs/dist_phylo_declone.rds, outputs/tree_fitch_declone.rds)
 set.seed(42)
 gl_tree <- gl_mll
 popNames(gl_tree) <- gsub("[^A-Za-z0-9]", "", popNames(gl_tree))
@@ -1971,7 +1970,7 @@ tr <- gl.tree.fitch(Dphylo, x = gl_tree, phylip.path = dirname(Sys.which("fitch"
 dev.off()
 saveRDS(tr, "outputs/tree_fitch_declone.rds")
 
-## Fig. 8: country tree with full names and region colours (figures/taro_tree_declone_ggtree.png)
+## Figure 8: country tree with full names and region colours (figures/taro_tree_declone_ggtree.png)
 # PHYLIP truncates tip labels to 10 alphanumeric characters
 orig <- names(region)
 map <- data.frame(trunc = substr(gsub("[^A-Za-z0-9]", "", orig), 1, 10),
@@ -1996,7 +1995,7 @@ p8 <- ggtree(tr_plot, linewidth = 0.6) %<+% tipdat +
   labs(x = "Branch length (F81 distance)")
 ggsave("figures/taro_tree_declone_ggtree.png", p8, width = 8, height = 7, dpi = 200, bg = "white")
 
-## Supplementary Data 3: bootstrap support of the country tree, 1,000 locus resamples (outputs/tree_support.csv)
+## Supplemental Data S3: bootstrap support of the country tree, 1,000 locus resamples (outputs/tree_support.csv)
 # Vectorised F81 distance among individuals from the tags, averaged between countries (reproduces gl.dist.phylo)
 gl_bs <- gl.filter.overshoot(gl_tree, verbose = 0)
 M <- as.matrix(gl_bs)
@@ -2091,7 +2090,7 @@ write.csv(support_table[order(-support_table$support), ], "outputs/tree_support.
 
 # --- Admixture validation with sNMF and PopCluster ---------------------------
 
-## Fig. S8: sNMF K = 6 on the 392 genets, 10 runs, regularisation 1, dendrogram-ordered (figures/snmf_declone_K6_den.png)
+## Supplemental Figure S6: sNMF K = 6 on the 392 genets, 10 runs, regularisation 1, dendrogram-ordered (figures/snmf_declone_K6_den.png)
 set.seed(42)
 gl_s <- gl_mll
 levels(gl_s@pop) <- unname(pretty_country(levels(gl_s@pop), short = TRUE))
@@ -2101,7 +2100,7 @@ saveRDS(sr, "outputs/snmf_declone/snmf_declone_res.rds")
 region_s <- setNames(region, pretty_country(names(region), short = TRUE))
 qc <- paste0("Pop_", 1:6)
 
-## SI S4.3: mean sNMF ancestry by region (outputs/snmf_declone/mean_ancestry_by_region.csv)
+## Supplemental Section S4.3: mean sNMF ancestry by region (outputs/snmf_declone/mean_ancestry_by_region.csv)
 reg <- factor(region_s[as.character(pop(gl_s))], levels = region_levels)
 write.csv(aggregate(sr$matrix[["K6"]][qc], list(region = reg), function(x) round(mean(x), 2)),
           "outputs/snmf_declone/mean_ancestry_by_region.csv", row.names = FALSE)
@@ -2116,7 +2115,7 @@ invisible(gl.plot.snmf(snmf.result = sr, plot.K = 6, den = TRUE, inverse.den = T
                        ind.name = FALSE, plot.out = TRUE, plot.file = NULL, verbose = 0))
 dev.off()
 
-## Fig. S9: PopCluster K = 1-6, admixture model 2, five runs, on the 392 genets (figures/popcluster_taro_K6.png)
+## Supplemental Figure S7: PopCluster K = 1-6, admixture model 2, five runs, on the 392 genets (figures/popcluster_taro_K6.png)
 gl_pc <- readRDS("input_files/taro_diploid_mll.rds")
 ploidy(gl_pc) <- rep(2L, nInd(gl_pc))
 gl_pc <- gl.filter.callrate(gl_pc, method = "ind", threshold = 0.80, verbose = 0)
@@ -2211,7 +2210,7 @@ build_table <- function(M, groups) {
   res[order(-res$He), ]
 }
 
-## Table 1 / Supplementary Data 7: diversity by country on one ramet of every lineage recorded in the country
+## Table 1 / Supplemental Data S7: diversity by country on one ramet of every lineage recorded in the country
 gl   <- readRDS("input_files/taro_diploid.rds")
 memb <- read.csv("outputs/mlg_membership.csv", stringsAsFactors = FALSE)
 memb <- memb[match(indNames(gl), memb$id), ]
@@ -2224,7 +2223,7 @@ idx_percountry <- sort(ord[!duplicated(key[ord])])       # highest-call-rate ram
 by_country_pc <- build_table(Mfull[idx_percountry, , drop = FALSE], country_full[idx_percountry])
 write.csv(by_country_pc, "outputs/brad01_diversity_percountry.csv", row.names = FALSE)
 
-## Results / SI S4.5: 53 lineages shared among countries hold 518 accessions; 339 single-country lineages
+## Results / Supplemental Section S4.5: 53 lineages shared among countries hold 518 accessions; 339 single-country lineages
 n_cty_per_mll <- tapply(memb$country, memb$mll, function(x) length(unique(x)))
 shared     <- names(n_cty_per_mll)[n_cty_per_mll > 1]
 single_mll <- as.integer(names(n_cty_per_mll)[n_cty_per_mll == 1L])
@@ -2238,7 +2237,7 @@ write.csv(data.frame(
             length(idx_current), length(idx_percountry))),
   "outputs/brad01_ibd_singlecountry.csv", row.names = FALSE)
 
-## Table S1 / Supplementary Data 8: diversity by K = 6 ancestry cluster on the 392 genets
+## Supplemental Table S2 / Supplemental Data S8: diversity by K = 6 ancestry cluster on the 392 genets
 gl_mll <- readRDS("input_files/taro_diploid_mll.rds")
 M_mll  <- as.matrix(gl_mll)
 country_mll <- as.character(pop(gl_mll))
@@ -2249,7 +2248,7 @@ cluster <- unname(clust_by_id[indNames(gl_mll)])
 by_cluster <- build_table(M_mll, cluster)
 write.csv(by_cluster, "outputs/diversity_by_cluster.csv", row.names = FALSE)
 
-## Table S2: bootstrap 95% CIs for He, Ho, FIS and Ar by country (1,000 resamples of genets)
+## Supplemental Table S5: bootstrap 95% CIs for He, Ho, FIS and Ar by country (1,000 resamples of genets)
 set.seed(42)
 gl_pc <- gl.keep.ind(gl, ind.list = indNames(gl)[idx_percountry], verbose = 0)
 cmap  <- setNames(memb$country, memb$id)
@@ -2283,7 +2282,7 @@ ci_tab <- do.call(rbind, rows)
 ci_tab <- ci_tab[order(-ci_tab$He), ]
 write.csv(ci_tab, "outputs/brad01_diversity_ci.csv", row.names = FALSE)
 
-## SI S4.4: raw private-allele count vs N (Spearman rho = 0.34, P = 0.29) on the 392 genets
+## Supplemental Section S4.4: raw private-allele count vs N (Spearman rho = 0.34, P = 0.29) on the 392 genets
 Pres_mll <- pres_matrix(M_mll)
 keep_mll <- names(which(table(country_mll) >= MIN_N))
 priv_raw <- function(groups, levs) {
@@ -2296,7 +2295,7 @@ raw <- priv_raw(country_mll, keep_mll)
 Ns  <- table(country_mll)[keep_mll]
 priv_vs_N <- cor.test(raw, as.numeric(Ns), method = "spearman")
 
-## SI S4.4: rarefied private allelic richness, balanced panel of K = 10 genets, 500 resamples
+## Supplemental Section S4.4: rarefied private allelic richness, balanced panel of K = 10 genets, 500 resamples
 set.seed(42)
 K <- 10L; R <- 500L
 pool <- names(which(table(country_mll) >= K))
@@ -2318,7 +2317,7 @@ rare <- data.frame(country = pool,
 rare <- rare[order(-rare$private_rarefied_K10), ]
 write.csv(rare, "outputs/private_rarefied.csv", row.names = FALSE)
 
-## Fig. 4: expected heterozygosity and FIS by country (figures/diversity_by_country.png)
+## Figure 4: expected heterozygosity and FIS by country (figures/diversity_by_country.png)
 region <- c(
   Indonesia = "SE/E Asia", Malaysia = "SE/E Asia", Thailand = "SE/E Asia",
   Vietnam = "SE/E Asia", Philippines = "SE/E Asia", Japan = "SE/E Asia",
@@ -2362,7 +2361,7 @@ pB <- ggplot(pc, aes(x = FIS, y = reorder(label, He))) +
 g <- arrangeGrob(pA, pB, ncol = 2, widths = c(1.25, 1))
 ggsave("figures/diversity_by_country.png", g, width = 11, height = 5.6, dpi = 300, bg = "white")
 
-## Table 1 and Table S1 as Markdown text (outputs/ms_tables.md)
+## Table 1 and Supplemental Table S2 as Markdown text (outputs/ms_tables.md)
 clon <- read.csv("outputs/mlg_diversity_indices.csv", stringsAsFactors = FALSE)
 m <- merge(by_country_pc, clon[, c("level", "N", "G_MLL", "R")],
            by.x = "group", by.y = "level", suffixes = c("_genet", "_ram"))
@@ -2445,7 +2444,7 @@ pop(gl_reg) <- factor(reg[keep_reg], levels = c("SEEAsia", "Melanesia", "Polynes
 fst <- gl.fst.pop(gl_reg, nboots = 1000, percent = 95, nclusters = 1, verbose = 0)
 write.csv(fst$Bootstraps, "outputs/fst_regions.csv", row.names = FALSE)
 
-## Table S5: isolation by distance under four designs (design A is the main-text Mantel r = 0.37, P = 0.0002)
+## Supplemental Table S4: isolation by distance under four designs (design A is the main-text Mantel r = 0.37, P = 0.0002)
 set.seed(42)
 keymap <- c(TahitiFrenchPolynesia = "Tahiti&FrenchPolynesia")   # popNames stripped of "&" back to centroid names
 # per-country F81 distance matrix of a genlight whose pop() is country
@@ -2492,7 +2491,7 @@ write.csv(data.frame(
   mantel_p = signif(c(ibd_A$p, ibd_B$p, ibd_C$p, ibd_D$p), 4)),
   "outputs/brad04_ibd_matched.csv", row.names = FALSE)
 
-## Table S4: sensitivity of diversity ranking, PCA axes, regional FST and Mantel test to the ploidy threshold
+## Supplemental Table S1: sensitivity of diversity ranking, PCA axes, regional FST and Mantel test to the ploidy threshold
 set.seed(42)
 CUT      <- 0.008     # main-text lineage cut height (complete linkage)
 THR_MAIN <- 0.0923
@@ -2586,7 +2585,7 @@ summ <- data.frame(
 write.csv(summ, "outputs/brad02_threshold_summary.csv", row.names = FALSE)
 
 # ============================================================================
-# 10. Selection scan and gene context (Fig. S5; SI S3)
+# 10. Selection scan and gene context (Supplemental Figure S9; Supplemental Section S3)
 # ============================================================================
 
 # OHANA matrix helpers (first line holds the dimensions)
@@ -2785,20 +2784,20 @@ run_component_scan <- function(panel, dgm, bim, out, seeds) {
   invisible(selection)
 }
 
-## Fig. S5: OHANA selection scans for the six ancestry components (392 genets)
+## Supplemental Figure S9: OHANA selection scans for the six ancestry components (392 genets)
 ## Results: three candidates after Bonferroni across 19,044 tests (3,174 loci x 6 components)
 run_component_scan("genets", "outputs/ohana_declone/g.dgm", "outputs/ohana_declone/gl_plink.bim",
                    "outputs/ohana_selection_genets", c(0:28, 3011845641))
 ## Methods: consensus-genotype panel (3,115 loci)
 run_component_scan("consensus", "outputs/ohana_consensus/g.dgm", "outputs/ohana_consensus/markers.bim",
                    "outputs/ohana_selection_consensus", 0:29)
-## Methods / SI S3: all 1,064 accessions (3,690 loci)
+## Methods / Supplemental Section S3: all 1,064 accessions (3,690 loci)
 run_component_scan("accessions", "outputs/ohana/g.dgm", "outputs/ohana/gl_plink.bim",
                    "outputs/ohana_selection_accessions", c(0:28, 3915235949))
 
 # ---- Align components across panels and compare the candidates ----
-## SI S3: matched-component allele frequency correlations (r = 0.967-0.986; accession best match 0.249)
-## SI S3 table: adjusted P of the candidates in the genet and consensus panels
+## Supplemental Section S3: matched-component allele frequency correlations (r = 0.967-0.986; accession best match 0.249)
+## Supplemental Section S3 table: adjusted P of the candidates in the genet and consensus panels
 panels <- c("genets", "consensus", "accessions")
 reference_panel <- "genets"
 read_panel <- function(panel) {
@@ -2879,7 +2878,7 @@ candidate_comparison <- do.call(rbind, lapply(seq_len(nrow(candidate_keys)), fun
 }))
 write.csv(candidate_comparison, "outputs/ohana_selection_candidate_comparison.csv", row.names = FALSE)
 
-## SI S3: mean ancestry of the candidate component by country (Philippines 0.64, Palau 0.73)
+## Supplemental Section S3: mean ancestry of the candidate component by country (Philippines 0.64, Palau 0.73)
 fam_g <- read.table("outputs/ohana_declone/gl_plink.fam", stringsAsFactors = FALSE)
 q_g <- read_matrix("outputs/ohana_selection_genets/best/q.k6.matrix")
 sel_g <- data$genets$selection
@@ -2887,7 +2886,7 @@ comp_g <- unique(sel_g$component[sel_g$significant]) + 1L
 ancestry_g <- aggregate(q_g[, comp_g, drop = FALSE], list(country = fam_g$V1), mean)
 write.csv(ancestry_g, "outputs/ohana_selection_genets/candidate_component_ancestry.csv", row.names = FALSE)
 
-## SI S3: the accession-panel component holding the five candidates is one clonal lineage of 23 ramets
+## Supplemental Section S3: the accession-panel component holding the five candidates is one clonal lineage of 23 ramets
 fam_a <- read.table("outputs/ohana/gl_plink.fam", stringsAsFactors = FALSE)
 q_a <- read_matrix("outputs/ohana_selection_accessions/best/q.k6.matrix")
 sel_a <- data$accessions$selection

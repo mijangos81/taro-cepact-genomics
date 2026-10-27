@@ -2,12 +2,15 @@
 
 Analysis code for:
 
-> Mijangos JL, Restall J, Kilian A, Campbell B. Genome-wide SNPs reveal clonal
-> redundancy and connectivity in the world's largest taro collection.
-> *Horticulture Research* (submitted).
+> Restall J, Mijangos JL, Kilian A, Cakaunitavuki S, Kumar RJ, Nand P, Dau S,
+> Meleisea Waqainabete L, Sukal A, Dinglasan E, Chapman S, Godwin I, Smith M,
+> Campbell B. Shared clones trace the exchange of taro across the Pacific in the
+> world's largest in vitro collection (submitted).
+
+Jemma Restall and Jose Luis Mijangos contributed equally.
 
 `reproduce_manuscript.R` regenerates every figure, table and reported number of
-the paper and its Supplementary Information from the DArTseq genotypes of the
+the paper and its Supplemental Material from the DArTseq genotypes of the
 taro (*Colocasia esculenta*) collection at the Centre for Pacific Crops and Trees
 (CePaCT). It runs from the repository root in ten sections, in the order the
 analyses depend on each other; the section list is at the top of the script.
@@ -45,7 +48,7 @@ Developed with R 4.4.2 and dartRverse 1.2.6 (dartR.base, dartR.popgen), adegenet
 
 ## Citation
 
-Cite the paper and this archive (Zenodo, DOI [CODE_DOI]); see `CITATION.cff`.
+Cite the paper and this archive (Zenodo, DOI [10.5281/zenodo.23309030](https://doi.org/10.5281/zenodo.23309030)); see `CITATION.cff`.
 
 ## Licence
 
